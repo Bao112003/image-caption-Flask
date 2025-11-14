@@ -11,7 +11,6 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
-# Biến toàn cục
 model = None
 tokenizer = None
 feature_model = None
@@ -31,26 +30,38 @@ def load_models():
         print(f"Vocabulary size: {vocab_size}")
         
         print("Loading caption model...")
-        from tensorflow.keras.models import load_model
         
-        model = load_model('caption_model_final.keras', compile=False)
+        # Sử dụng keras thay vì tensorflow.keras nếu cần
+        try:
+            from tensorflow.keras.models import load_model
+            model = load_model('caption_model_final.keras', compile=False)
+        except:
+            from keras.models import load_model
+            model = load_model('caption_model_final.keras', compile=False)
         
-        from tensorflow.keras.optimizers import Adam
-        model.compile(loss='categorical_crossentropy', optimizer=Adam(learning_rate=0.001))
+        try:
+            from tensorflow.keras.optimizers import Adam
+            model.compile(loss='categorical_crossentropy', optimizer=Adam(learning_rate=0.001))
+        except:
+            from keras.optimizers import Adam
+            model.compile(loss='categorical_crossentropy', optimizer=Adam(learning_rate=0.001))
         
         max_length = model.inputs[1].shape[1]
         print(f"Detected max_length: {max_length}")
         
         print("Loading feature extraction model...")
         
-        from tensorflow.keras.applications.inception_v3 import InceptionV3, preprocess_input
-        from tensorflow.keras.models import Model
+        try:
+            from tensorflow.keras.applications.inception_v3 import InceptionV3, preprocess_input
+            from tensorflow.keras.models import Model
+        except:
+            from keras.applications.inception_v3 import InceptionV3, preprocess_input
+            from keras.models import Model
         
         base = InceptionV3(weights='imagenet', include_top=False, pooling='avg')
         feature_model = Model(base.input, base.output)
         
         print("All models loaded successfully!")
-        print(f"Model input shapes: {[input.shape for input in model.inputs]}")
         
     except Exception as e:
         print(f"Error loading models: {e}")
@@ -59,8 +70,12 @@ def load_models():
 
 def extract_features(image_path):
     try:
-        from tensorflow.keras.preprocessing.image import load_img, img_to_array
-        from tensorflow.keras.applications.inception_v3 import preprocess_input
+        try:
+            from tensorflow.keras.preprocessing.image import load_img, img_to_array
+            from tensorflow.keras.applications.inception_v3 import preprocess_input
+        except:
+            from keras.preprocessing.image import load_img, img_to_array
+            from keras.applications.inception_v3 import preprocess_input
         
         target_size = (299, 299)
         
@@ -80,7 +95,10 @@ def extract_features(image_path):
 
 def generate_caption_clean(model, tokenizer, photo_feature, max_length):
     try:
-        from tensorflow.keras.preprocessing.sequence import pad_sequences
+        try:
+            from tensorflow.keras.preprocessing.sequence import pad_sequences
+        except:
+            from keras.preprocessing.sequence import pad_sequences
         
         in_text = 'startseq'
         for _ in range(max_length):
@@ -103,8 +121,6 @@ def generate_caption_clean(model, tokenizer, photo_feature, max_length):
         
     except Exception as e:
         print(f"Error generating caption: {e}")
-        import traceback
-        traceback.print_exc()
         return "Cannot generate caption"
 
 @app.route('/')
