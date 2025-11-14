@@ -170,8 +170,8 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🖼️ Image Caption Generator</h1>
-            <p>Tải lên một bức ảnh và AI sẽ mô tả nội dung</p>
+            <h1> Image Caption Generator</h1>
+            
         </div>
         
         <div class="content">
@@ -185,22 +185,22 @@
             <input type="file" id="fileInput" class="file-input" accept="image/*">
             
             <button class="btn" onclick="predictCaption()" id="predictBtn" disabled>
-                🚀 Tạo Caption
+                 Tạo Caption
             </button>
             
             <div class="loading" id="loading">
                 <div class="spinner"></div>
-                <p>AI đang phân tích ảnh và tạo caption...</p>
+                <p> đang phân tích ảnh và tạo caption...</p>
             </div>
             
             <div class="error" id="error"></div>
             
             <div class="result-area" id="resultArea">
-                <h3>📸 Ảnh của bạn:</h3>
+                
                 <img id="previewImage" class="preview-image" src="" alt="Preview">
                 
                 <div class="caption-box">
-                    <h3>📝 Caption được tạo:</h3>
+                    <h3>Caption :</h3>
                     <p class="caption-text" id="captionText"></p>
                 </div>
                 

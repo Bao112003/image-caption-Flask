@@ -331,7 +331,7 @@ if __name__ == '__main__':
     load_models()
     
     if model and tokenizer and feature_model:
-        port = int(os.environ.get('PORT', 5000))
-        app.run(host='0.0.0.0', port=port)
+        print("Flask app running on http://localhost:5000")
+        app.run(debug=True, host='0.0.0.0', port=5000)
     else:
         print("Cannot start app due to model loading errors")
