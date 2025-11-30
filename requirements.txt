@@ -5,3 +5,4 @@ Pillow==10.0.0
 gTTS==2.4.0
 gunicorn==21.2.0
 keras==3.3.3
+python-3.11.8
